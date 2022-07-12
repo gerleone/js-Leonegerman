@@ -8,3 +8,6 @@
   border: none;
   outline: none; }
 
+body div {
+  padding: 0;
+}
