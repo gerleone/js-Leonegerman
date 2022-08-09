@@ -8,6 +8,7 @@
   border: none;
   outline: none; }
 
-body div {
+body div nav div{
   padding: 0;
+  margin: 0;
 }

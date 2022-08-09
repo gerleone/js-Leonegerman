@@ -117,7 +117,7 @@ function cards (card) {
                 </div>
                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                     <div class="text-center">
-                        <button class="btn btn-outline-light mt-auto btn-dark" id="add-cart${producto.id}" href="#">
+                        <button class="btn btn-outline-light mt-auto btn-info" id="add-cart${producto.id}" href="#">
                         Agregar
                         </button>
                     </div>
