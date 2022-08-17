@@ -91,22 +91,22 @@ const productos = [
     },
 ];
 
-function totalCarrito(total){
+function totalCarrito(total) {
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    document.getElementById("costoTotalCarrito").innerHTML = `Total =  $${total}`
+    document.getElementById("costoTotalCarrito").innerHTML = `<B>Total =  $${total}</B>`
 }
 totalCarrito(total)
 
-function pintarTotalCarrito(total){
+function pintarTotalCarrito(total) {
     localStorage.setItem("carrito", JSON.stringify(carrito));
     document.getElementById("cart-total").innerHTML = `${carrito.length}  - $${total}`;
 }
 
 //----Generador de cards----
-function cards (card) {
+function cards(card) {
     card.forEach((producto) => {
-        document.getElementById("seccion-card").innerHTML += 
-        `<div class="col mb-5">
+        document.getElementById("seccion-card").innerHTML +=
+            `<div class="col mb-5">
             <div class="card h-100">
                 <img class="card-img-top" src="${producto.img}" alt="..." />
                 <div class="card-body p-4">
@@ -124,7 +124,7 @@ function cards (card) {
                 </div>
             </div>
         </div>`
-})
+    })
 }
 cards(productos)
 
@@ -133,13 +133,14 @@ cards(productos)
 function generarCardsCarrito() {
     document.getElementById("card-cart").innerHTML = "";
     carrito.forEach((producto) => {
-        document.getElementById("card-cart").innerHTML += 
-        `<tr>
+        document.getElementById("card-cart").innerHTML +=
+            `<tr>
             <th scope="row">${producto.title}</th>
             <td>${producto.category}</td>
             <td><img src="${producto.img}" style="height: 30px" ></td>
+            <td><input class="shopping-cart-quantity-input shoppingCartItemQuantity" type="number" value="1" style="width: 40px"></td>
             <td>${producto.price}</td>
-            <td><button type="button" class="btn btn-secondary"  id="eliminar(${producto.id}" onclick="eliminar(${producto.id})" info-borrar="${producto.id}">X</button></td>
+            <td><button type="button" class="btn btn-secondary"  id="eliminar" onclick="eliminar(${producto.id})" info-borrar="${producto.id}">X</button></td>
         </tr>`
     })
 }
@@ -149,12 +150,13 @@ generarCardsCarrito()
 //----------------Funcion para agregar cart al carrito
 
 function agregarCart(lista) {
-    for(const producto of lista) {
-        document.getElementById("add-cart"+producto.id).addEventListener("click", () => {
+    for (const producto of lista) {
+        document.getElementById("add-cart" + producto.id).addEventListener("click", () => {
             carrito.push(producto);
             const costoTotal = carrito.reduce((total, producto) => total + producto.price, 0)
             pintarTotalCarrito(costoTotal);
-            generarCardsCarrito()
+            generarCardsCarrito();
+            totalCarrito(costoTotal);
         })
     }
 }
@@ -168,7 +170,7 @@ function filtroCategoria(categoria) {
     const productosFiltrados = productos.filter((producto) => producto.category === categoria)
     cards(productosFiltrados)
     agregarCart(productosFiltrados)
-    }
+}
 
 
 for (const nodoHTML of document.getElementsByClassName('filtrar-categoria')) {
@@ -183,9 +185,39 @@ for (const nodoHTML of document.getElementsByClassName('filtrar-categoria')) {
 function eliminar(productoId) {
     const prod = carrito.find((producto) => producto.id == productoId)
     let i = carrito.indexOf(prod)
-    if (i != -1) {carrito.splice(i, 1)}
+    if (i != -1) { carrito.splice(i, 1) }
     const costoTotal = carrito.reduce((total, producto) => total + producto.price, 0)
     pintarTotalCarrito(costoTotal)
     generarCardsCarrito()
+    totalCarrito(costoTotal)
 }
 
+
+document.getElementById("eliminar").addEventListener("click", () => {
+swalWithBootstrapButtons.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, cancel!',
+    reverseButtons: true
+}).then((result) => {
+    if (result.isConfirmed) {
+        swalWithBootstrapButtons.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+        )
+    } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+    ) {
+        swalWithBootstrapButtons.fire(
+            'Cancelled',
+            'Your imaginary file is safe :)',
+            'error'
+        )
+    }
+})
+})
