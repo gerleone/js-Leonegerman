@@ -1,3 +1,14 @@
 [
-    {"id": 1, "title": "Zapatilla nike", "img": src = "./img/ZapatillasNike.webp", "price": 24900, "category": "caballero"},
+    {"id": 1, "title": "Zapatilla nike", "img": "img/ZapatillasNike.webp", "price": 24900, "category": "caballero"},
+    {"id": 2, "title": "Zapatilla Jaguar", "img": "img/ZapatillasJaguar.jpg", "price": 11900, "category": "niño"},
+    {"id": 3, "title": "Zapatilla Adidas", "img": "img/ZapatillasAdidas.webp", "price": 26900, "category": "caballero"},
+    {"id": 4, "title": "Zapatilla Reebok", "img": "img/ZapatillasReebok.webp", "price": 16900, "category": "dama"},
+    {"id": 5, "title": "Zapatilla Fila", "img": "img/ZapatillasFila.webp", "price": 14900, "category": "caballero"},
+    {"id": 6, "title": "Zapatilla Puma", "img": "img/ZapatillasPuma.webp", "price": 23500, "category": "dama"},
+    {"id": 7, "title": "Zapatilla Topper", "img": "img/ZapatillaTopper.webp", "price": 14900, "category": "caballero"},
+    {"id": 8, "title": "Zapatilla AllStar", "img": "img/ZapatillaAllStarNiño.jpg", "price": 10900, "category": "niño"},
+    {"id": 9, "title": "Zapatilla Nike", "img": "img/zapatillanikeniño.jpg", "price": 14900, "category": "niño"},
+    {"id": 10, "title": "Zapatilla Adidas", "img": "img/zapatillaadidasdama.webp", "price": 23900, "category": "dama"},
+    {"id": 11, "title": "Zapatilla Adidas", "img": "img/zapatillaadidasniño.webp", "price": 14900, "category": "niño"},
+    {"id": 12, "title": "Zapatilla AllStar", "img": "img/ZapatillaAllStar.jpg", "price": 22900, "category": "dama"}
 ]

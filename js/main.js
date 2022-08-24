@@ -3,94 +3,6 @@ const total = carrito.reduce((acumulador, producto) => acumulador + producto.pri
 pintarTotalCarrito(total)
 
 
-
-const productos = [
-    {
-        id: 1,
-        title: "Zapatilla nike",
-        img: src = "./img/ZapatillasNike.webp",
-        price: 24900,
-        category: "caballero"
-    },
-    {
-        id: 2,
-        title: "Zapatilla Jaguar",
-        img: src = "./img/ZapatillasJaguar.jpg",
-        price: 11999,
-        category: "niño"
-    },
-    {
-        id: 3,
-        title: "Zapatilla Adidas",
-        img: src = "./img/ZapatillasAdidas.webp",
-        price: 26500,
-        category: "caballero"
-    },
-    {
-        id: 4,
-        title: "Zapatilla Reebok",
-        img: src = "./img/ZapatillasReebok.webp",
-        price: 16500,
-        category: "dama"
-    },
-    {
-        id: 5,
-        title: "Zapatilla Fila",
-        img: src = "./img/ZapatillasFila.webp",
-        price: 14500,
-        category: "caballero"
-    },
-    {
-        id: 6,
-        title: "Zapatilla Puma",
-        img: src = "./img/ZapatillasPuma.webp",
-        price: 23500,
-        category: "dama"
-    },
-    {
-        id: 7,
-        title: "Zapatilla Topper",
-        img: src = "./img/ZapatillaTopper.webp",
-        price: 14800,
-        category: "caballero"
-    },
-    {
-        id: 8,
-        title: "Zapatilla AllStar",
-        img: src = "./img/ZapatillaAllStarNiño.jpg",
-        price: 10500,
-        category: "niño"
-    },
-    {
-        id: 9,
-        title: "Zapatilla Nike",
-        img: src = "./img/zapatillanikeniño.jpg",
-        price: 15500,
-        category: "niño"
-    },
-    {
-        id: 10,
-        title: "Zapatilla Adidas",
-        img: src = "./img/zapatillaadidasdama.webp",
-        price: 20500,
-        category: "dama"
-    },
-    {
-        id: 11,
-        title: "Zapatilla Adidas",
-        img: src = "./img/zapatillaadidasniño.webp",
-        price: 13500,
-        category: "niño"
-    },
-    {
-        id: 12,
-        title: "Zapatilla AllStar",
-        img: src = "./img/ZapatillaAllStar.jpg",
-        price: 23500,
-        category: "dama"
-    },
-];
-
 function totalCarrito(total) {
     localStorage.setItem("carrito", JSON.stringify(carrito));
     document.getElementById("costoTotalCarrito").innerHTML = `<B>Total =  $${total}</B>`
@@ -102,31 +14,37 @@ function pintarTotalCarrito(total) {
     document.getElementById("cart-total").innerHTML = `${carrito.length}  - $${total}`;
 }
 
-//----Generador de cards----
-function cards(card) {
-    card.forEach((producto) => {
-        document.getElementById("seccion-card").innerHTML +=
-            `<div class="col mb-5">
-            <div class="card h-100">
-                <img class="card-img-top" src="${producto.img}" alt="..." />
-                <div class="card-body p-4">
-                    <div class="text-center">
-                        <h5 class="fw-bolder">${producto.title}</h5>
-                        <p>$${producto.price}</p>
+const cards = async () => {
+    await fetch("productos.json")
+        .then((res)=> res.json())
+        .then(info =>{
+            let acumulador = '';
+            info.forEach((producto) => {
+                console.log(producto)
+                acumulador += `<div class="col mb-5">
+                <div class="card h-100">
+                    <img class="card-img-top" src="${producto.img}" alt="..." />
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <h5 class="fw-bolder">${producto.title}</h5>
+                            <p>$${producto.price}</p>
+                        </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <button class="btn btn-outline-light mt-auto btn-info" id="add-cart${producto.id}" href="#">
+                            Agregar
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <div class="text-center">
-                        <button class="btn btn-outline-light mt-auto btn-info" id="add-cart${producto.id}" href="#">
-                        Agregar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>`
-    })
+            </div>`
+            })
+            document.getElementById("seccion-card").innerHTML = acumulador
+        })
 }
-cards(productos)
+cards()
+
 
 
 // ------cards carrito
@@ -142,9 +60,38 @@ function generarCardsCarrito() {
             <td>${producto.price}</td>
             <td><button type="button" class="btn btn-secondary"  id="eliminar" onclick="eliminar(${producto.id})" info-borrar="${producto.id}">X</button></td>
         </tr>`
+        
     })
+    document.getElementById("eliminar").addEventListener("click", () => {
+        swalWithBootstrapButtons.fire({
+            title: 'Esta seguro que quiere borrar el producto?',
+            text: "No podra recuperarlo!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si, Borrar!',
+            cancelButtonText: 'Cancelar!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                swalWithBootstrapButtons.fire(
+                    'Borrado!',
+                    'Su archivo ha sido borrado.',
+                )
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelado',
+                    'Su producto no se ha borrado :)',
+                )
+            }
+        })
+        })
+    
 }
 generarCardsCarrito()
+
 
 
 //----------------Funcion para agregar cart al carrito
@@ -193,31 +140,115 @@ function eliminar(productoId) {
 }
 
 
-document.getElementById("eliminar").addEventListener("click", () => {
-swalWithBootstrapButtons.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'No, cancel!',
-    reverseButtons: true
-}).then((result) => {
-    if (result.isConfirmed) {
-        swalWithBootstrapButtons.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-        )
-    } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-    ) {
-        swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Your imaginary file is safe :)',
-            'error'
-        )
-    }
-})
-})
+// const productos = [
+//     {
+//         id: 1,
+//         title: "Zapatilla nike",
+//         img: src = "./img/ZapatillasNike.webp",
+//         price: 24900,
+//         category: "caballero"
+//     },
+//     {
+//         id: 2,
+//         title: "Zapatilla Jaguar",
+//         img: src = "./img/ZapatillasJaguar.jpg",
+//         price: 11999,
+//         category: "niño"
+//     },
+//     {
+//         id: 3,
+//         title: "Zapatilla Adidas",
+//         img: src = "./img/ZapatillasAdidas.webp",
+//         price: 26500,
+//         category: "caballero"
+//     },
+//     {
+//         id: 4,
+//         title: "Zapatilla Reebok",
+//         img: src = "./img/ZapatillasReebok.webp",
+//         price: 16500,
+//         category: "dama"
+//     },
+//     {
+//         id: 5,
+//         title: "Zapatilla Fila",
+//         img: src = "./img/ZapatillasFila.webp",
+//         price: 14500,
+//         category: "caballero"
+//     },
+//     {
+//         id: 6,
+//         title: "Zapatilla Puma",
+//         img: src = "./img/ZapatillasPuma.webp",
+//         price: 23500,
+//         category: "dama"
+//     },
+//     {
+//         id: 7,
+//         title: "Zapatilla Topper",
+//         img: src = "./img/ZapatillaTopper.webp",
+//         price: 14800,
+//         category: "caballero"
+//     },
+//     {
+//         id: 8,
+//         title: "Zapatilla AllStar",
+//         img: src = "./img/ZapatillaAllStarNiño.jpg",
+//         price: 10500,
+//         category: "niño"
+//     },
+//     {
+//         id: 9,
+//         title: "Zapatilla Nike",
+//         img: src = "./img/zapatillanikeniño.jpg",
+//         price: 15500,
+//         category: "niño"
+//     },
+//     {
+//         id: 10,
+//         title: "Zapatilla Adidas",
+//         img: src = "./img/zapatillaadidasdama.webp",
+//         price: 20500,
+//         category: "dama"
+//     },
+//     {
+//         id: 11,
+//         title: "Zapatilla Adidas",
+//         img: src = "./img/zapatillaadidasniño.webp",
+//         price: 13500,
+//         category: "niño"
+//     },
+//     {
+//         id: 12,
+//         title: "Zapatilla AllStar",
+//         img: src = "./img/ZapatillaAllStar.jpg",
+//         price: 23500,
+//         category: "dama"
+//     },
+// ];
+
+// //----Generador de cards----
+// function cards(card) {
+//     card.forEach((producto) => {
+//         document.getElementById("seccion-card").innerHTML +=
+//             `<div class="col mb-5">
+//             <div class="card h-100">
+//                 <img class="card-img-top" src="${producto.img}" alt="..." />
+//                 <div class="card-body p-4">
+//                     <div class="text-center">
+//                         <h5 class="fw-bolder">${producto.title}</h5>
+//                         <p>$${producto.price}</p>
+//                     </div>
+//                 </div>
+//                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+//                     <div class="text-center">
+//                         <button class="btn btn-outline-light mt-auto btn-info" id="add-cart${producto.id}" href="#">
+//                         Agregar
+//                         </button>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>`
+//     })
+// }
+// cards(productos)
