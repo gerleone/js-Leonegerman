@@ -15,15 +15,15 @@ function pintarTotalCarrito(total) {
 }
 
 const cards = async () => {
-    await fetch("productos.json")
-        .then((res)=> res.json())
-        .then(info =>{
-            let acumulador = '';
-            info.forEach((producto) => {
-                console.log(producto)
-                acumulador += `<div class="col mb-5">
-                <div class="card h-100">
-                    <img class="card-img-top" src="${producto.img}" alt="..." />
+    const response = await fetch("productos.json");
+    const data = await response.json();
+
+    let acumulador = '';
+    data.forEach((producto) => {
+        console.log(producto)
+        acumulador += `<div class="col mb-5">
+            <div class="card h-100">
+                <img class="card-img-top" src="${producto.img}" alt="..." />
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">${producto.title}</h5>
@@ -41,8 +41,8 @@ const cards = async () => {
             </div>`
             })
             document.getElementById("seccion-card").innerHTML = acumulador
-        })
-}
+        }
+
 cards()
 
 
