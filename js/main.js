@@ -41,7 +41,35 @@ const cards = async () => {
             </div>`
             })
             document.getElementById("seccion-card").innerHTML = acumulador
-        }
+
+            function agregarCart(lista) {
+                for (const producto of lista) {
+                    document.getElementById("add-cart" + producto.id).addEventListener("click", () => {
+                        carrito.push(producto);
+                        const costoTotal = carrito.reduce((total, producto) => total + producto.price, 0)
+                        pintarTotalCarrito(costoTotal);
+                        generarCardsCarrito();
+                        totalCarrito(costoTotal);
+                    })
+                }
+            }
+            agregarCart(data)
+
+            function filtroCategoria(categoria) {
+                document.getElementById("seccion-card").innerHTML = "";
+                const productosFiltrados = data.filter((producto) => producto.category === categoria)
+                cards(productosFiltrados)
+                agregarCart(productosFiltrados)
+            }
+        
+            for (const nodoHTML of document.getElementsByClassName('filtrar-categoria')) {
+                nodoHTML.onclick = (event) => {
+                    const categoria = event.target.getAttribute('data-categoria')
+                    filtroCategoria(categoria)
+                };
+            }
+        
+}
 
 cards()
 
@@ -58,74 +86,45 @@ function generarCardsCarrito() {
             <td><img src="${producto.img}" style="height: 30px" ></td>
             <td><input class="shopping-cart-quantity-input shoppingCartItemQuantity" type="number" value="1" style="width: 40px"></td>
             <td>${producto.price}</td>
-            <td><button type="button" class="btn btn-secondary"  id="eliminar" onclick="eliminar(${producto.id})" info-borrar="${producto.id}">X</button></td>
+            <td><button type="button" class="btn btn-secondary"  id="eliminar${producto.id}" onclick="eliminar(${producto.id})" info-borrar="${producto.id}">X</button></td>
         </tr>`
-        
     })
-    document.getElementById("eliminar").addEventListener("click", () => {
-        swalWithBootstrapButtons.fire({
-            title: 'Esta seguro que quiere borrar el producto?',
-            text: "No podra recuperarlo!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Si, Borrar!',
-            cancelButtonText: 'Cancelar!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                swalWithBootstrapButtons.fire(
-                    'Borrado!',
-                    'Su archivo ha sido borrado.',
-                )
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelado',
-                    'Su producto no se ha borrado :)',
-                )
-            }
-        })
-        })
-    
 }
 generarCardsCarrito()
 
+document.getElementById("add-cart" + producto.id).addEventListener("click", () => {
+    swal.fire({
+        title: 'Esta seguro que quiere borrar el producto?',
+        text: "No podra recuperarlo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Borrar!',
+        cancelButtonText: 'Cancelar!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            swal.fire(
+                'Borrado!',
+                'Su archivo ha sido borrado.',
+            )
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swal.fire(
+                'Cancelado',
+                'Su producto no se ha borrado :)',
+            )
+        }
+    })
+} 
+)
 
-
-//----------------Funcion para agregar cart al carrito
-
-function agregarCart(lista) {
-    for (const producto of lista) {
-        document.getElementById("add-cart" + producto.id).addEventListener("click", () => {
-            carrito.push(producto);
-            const costoTotal = carrito.reduce((total, producto) => total + producto.price, 0)
-            pintarTotalCarrito(costoTotal);
-            generarCardsCarrito();
-            totalCarrito(costoTotal);
-        })
-    }
-}
-agregarCart(productos)
 
 
 // //------Filtrar productos por categoria
 
-function filtroCategoria(categoria) {
-    document.getElementById("seccion-card").innerHTML = "";
-    const productosFiltrados = productos.filter((producto) => producto.category === categoria)
-    cards(productosFiltrados)
-    agregarCart(productosFiltrados)
-}
 
-
-for (const nodoHTML of document.getElementsByClassName('filtrar-categoria')) {
-    nodoHTML.onclick = (event) => {
-        const categoria = event.target.getAttribute('data-categoria')
-        filtroCategoria(categoria)
-    };
-}
 
 //----------Elimiar cart del carrito
 
